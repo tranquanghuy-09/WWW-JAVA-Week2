@@ -1,58 +1,65 @@
 package vn.edu.iuh.fit.backend.models;
 
-import vn.edu.iuh.fit.backend.enums.ProductStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import vn.edu.iuh.fit.backend.converters.ProductStatusConverter;
+import vn.edu.iuh.fit.backend.enums.ProductStatus;
 
 import java.util.List;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
 @Table(name = "product")
+@NamedQueries({
+        @NamedQuery(name = "Product.getAll", query = "FROM Product ORDER BY id"),
+        @NamedQuery(name = "Product.updateStatus", query = "UPDATE Product SET status = :status WHERE product_id = :product_id")
+})
+@XmlRootElement
 public class Product {
     @Id
+    @Column(columnDefinition = "BIGINT(20)")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
-    private long id;
-    @Column(name = "name", length = 150, nullable = false)
-    private String name;
-    @Column(name = "description", length = 250, nullable = true)
+    private long product_id;
+    @Column(columnDefinition = "VARCHAR(250)", nullable = false)
     private String description;
-    @Column(name = "unit",length = 25, nullable = false)
-    private int unit;
-    @Column(name = "manufacturer_name", length = 100, nullable = true)
-    private String manufacturerName;
-    @Column(name = "status", nullable = false)
+    @Column(name = "manufacturer_name", columnDefinition = "VARCHAR(100)", nullable = false)
+    private String manufacturer;
+    @Column(columnDefinition = "VARCHAR(150)", nullable = false)
+    private String name;
+    @Column(columnDefinition = "INT(11)")
+    @Convert(converter = ProductStatusConverter.class)
     private ProductStatus status;
+    @Column(columnDefinition = "VARCHAR(25)", nullable = false)
+    private String unit;
 
-    @OneToMany(mappedBy="product")
-    private List<ProductPrice> listOrder;
+    @OneToMany(mappedBy = "product")
+    private List<ProductImage> productImageList;
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<OrderDetail> orderDetails;
 
     public Product() {
     }
 
-    public Product(long id, String name, String description, int unit, String manufacturerName, ProductStatus status, List<ProductPrice> listOrder) {
-        this.id = id;
-        this.name = name;
+    public Product(long product_id) {
+        this.product_id = product_id;
+    }
+
+    public Product(String name, String description, String unit, String manufacturer, ProductStatus status) {
         this.description = description;
-        this.unit = unit;
-        this.manufacturerName = manufacturerName;
-        this.status = status;
-        this.listOrder = listOrder;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+        this.manufacturer = manufacturer;
         this.name = name;
+        this.status = status;
+        this.unit = unit;
+    }
+
+    public long getProduct_id() {
+        return product_id;
+    }
+
+    private void setProduct_id(long product_id) {
+        this.product_id = product_id;
     }
 
     public String getDescription() {
@@ -63,20 +70,20 @@ public class Product {
         this.description = description;
     }
 
-    public int getUnit() {
-        return unit;
+    public String getManufacturer() {
+        return manufacturer;
     }
 
-    public void setUnit(int unit) {
-        this.unit = unit;
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
     }
 
-    public String getManufacturerName() {
-        return manufacturerName;
+    public String getName() {
+        return name;
     }
 
-    public void setManufacturerName(String manufacturerName) {
-        this.manufacturerName = manufacturerName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public ProductStatus getStatus() {
@@ -87,24 +94,40 @@ public class Product {
         this.status = status;
     }
 
-    public List<ProductPrice> getListOrder() {
-        return listOrder;
+    public String getUnit() {
+        return unit;
     }
 
-    public void setListOrder(List<ProductPrice> listOrder) {
-        this.listOrder = listOrder;
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public List<ProductImage> getProductImageList() {
+        return productImageList;
+    }
+
+    public void setProductImageList(List<ProductImage> productImageList) {
+        this.productImageList = productImageList;
+    }
+
+    @JsonIgnore
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 
     @Override
     public String toString() {
         return "Product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "product_id=" + product_id +
                 ", description='" + description + '\'' +
-                ", unit=" + unit +
-                ", manufacturerName='" + manufacturerName + '\'' +
+                ", manufacturer='" + manufacturer + '\'' +
+                ", name='" + name + '\'' +
                 ", status=" + status +
-                ", listOrder=" + listOrder +
+                ", unit='" + unit + '\'' +
                 '}';
     }
 }

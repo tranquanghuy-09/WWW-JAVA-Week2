@@ -1,57 +1,55 @@
 package vn.edu.iuh.fit.backend.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.json.bind.annotation.JsonbDateFormat;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "product_price")
+@NamedQueries({
+        @NamedQuery(name = "ProductPrice.getAll", query = "FROM ProductPrice"),
+        @NamedQuery(name = "ProductPrice.getActiveProductsWithNewPrice", query = "FROM ProductPrice p WHERE price_date_time >= all (SELECT pp.price_date_time FROM ProductPrice pp WHERE pp.product.id = p.product.id)"),
+        @NamedQuery(name = "ProductPrice.countActiveProductsWithNewPrice", query = "SELECT count(*) FROM ProductPrice p WHERE price_date_time >= all (SELECT pp.price_date_time FROM ProductPrice pp WHERE pp.product.id = p.product.id)"),
+        @NamedQuery(name = "ProductPrice.findById", query = "FROM ProductPrice WHERE price_date_time = :price_date_time AND product.id = :productId"),
+        @NamedQuery(name = "ProductPrice.getProductNewPrice", query = "FROM ProductPrice WHERE product.id = :productId order by price_date_time desc")
+})
 public class ProductPrice {
-    @Column(name = "product_id")
-    private Product product;
     @Id
-    @Column(name = "price_date_time", nullable = false)
-    private LocalDateTime priceDateTime;
-    @Column(name = "price", nullable = false)
-    private double price;
-    @Column(name = "note", nullable = true)
+    @Column(columnDefinition = "DATETIME(6)")
+    @JsonbDateFormat(value = "yyyy-MM-dd")
+    private LocalDateTime price_date_time;
+    @Column(columnDefinition = "VARCHAR(255)")
     private String note;
+    @Column(columnDefinition = "DOUBLE", nullable = false)
+    private double price;
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "product_id")
+    private Product product;
 
     public ProductPrice() {
     }
 
-    public ProductPrice(Product product, LocalDateTime priceDateTime, double price, String note) {
-        this.product = product;
-        this.priceDateTime = priceDateTime;
-        this.price = price;
+    public ProductPrice(String note, double price, Product product) {
         this.note = note;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
+        this.price = price;
         this.product = product;
     }
 
-    public LocalDateTime getPriceDateTime() {
-        return priceDateTime;
-    }
-
-    public void setPriceDateTime(LocalDateTime priceDateTime) {
-        this.priceDateTime = priceDateTime;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
+    public ProductPrice(LocalDateTime price_date_time, String note, double price, Product product) {
+        this.price_date_time = price_date_time;
+        this.note = note;
         this.price = price;
+        this.product = product;
+    }
+
+    public LocalDateTime getPrice_date_time() {
+        return price_date_time;
+    }
+
+    public void setPrice_date_time(LocalDateTime price_date_time) {
+        this.price_date_time = price_date_time;
     }
 
     public String getNote() {
@@ -62,13 +60,29 @@ public class ProductPrice {
         this.note = note;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
     @Override
     public String toString() {
         return "ProductPrice{" +
-                "product=" + product +
-                ", priceDateTime=" + priceDateTime +
-                ", price=" + price +
+                "price_date_time=" + price_date_time +
                 ", note='" + note + '\'' +
+                ", price=" + price +
+                ", product=" + product +
                 '}';
     }
 }

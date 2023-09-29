@@ -1,7 +1,6 @@
-package vn.edu.iuh.fit.week02_lab_tranquanghuy_20092731;
+package vn.edu.iuh.fit.wwwjavaweek02;
 
 import java.io.*;
-
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 

@@ -1,43 +1,39 @@
 package vn.edu.iuh.fit.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
 @Table(name = "customer")
+@NamedQueries({
+        @NamedQuery(name = "Customer.getAll", query = "FROM Customer")
+})
 public class Customer {
     @Id
-    @Column(name = "cust_id", columnDefinition = "bigint(20)")
+    @Column(name = "cust_id", columnDefinition = "BIGINT(20)")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "cust_name", columnDefinition = "varchar(150)")
-    private String name;
-    @Column(name = "address", columnDefinition = "varchar(250)")
+    @Column(columnDefinition = "VARCHAR(250)", nullable = false)
     private String address;
-    @Column(name = "email", columnDefinition = "varchar(150)")
+    @Column(columnDefinition = "VARCHAR(150)")
     private String email;
-    @Column(name = "phone", columnDefinition = "varchar(15)")
+    @Column(name = "cust_name", columnDefinition = "VARCHAR(150)", nullable = false)
+    private String name;
+    @Column(columnDefinition = "VARCHAR(15)", nullable = false)
     private String phone;
-    @OneToMany
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<Order> orderList;
 
     public Customer() {
     }
 
-    public Customer(long id, String name, String address, String email, String phone, List<Order> orderList) {
-        this.id = id;
-        this.name = name;
+    public Customer(String address, String email, String name, String phone) {
         this.address = address;
         this.email = email;
-        this.phone = phone;
-        this.orderList = orderList;
-    }
-
-    public Customer(long id, String name, String address, String email, String phone) {
-        this.id = id;
         this.name = name;
-        this.address = address;
-        this.email = email;
         this.phone = phone;
     }
 
@@ -45,16 +41,8 @@ public class Customer {
         return id;
     }
 
-    public void setId(long id) {
+    private void setId(long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getAddress() {
@@ -73,6 +61,14 @@ public class Customer {
         this.email = email;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -81,6 +77,7 @@ public class Customer {
         this.phone = phone;
     }
 
+    @JsonIgnore
     public List<Order> getOrderList() {
         return orderList;
     }
@@ -93,11 +90,10 @@ public class Customer {
     public String toString() {
         return "Customer{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
-                ", orderList=" + orderList +
                 '}';
     }
 }

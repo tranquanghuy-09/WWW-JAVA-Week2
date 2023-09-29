@@ -1,48 +1,53 @@
 package vn.edu.iuh.fit.backend.models;
 
-import vn.edu.iuh.fit.backend.enums.EmployeeStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.json.bind.annotation.JsonbDateFormat;
 import jakarta.persistence.*;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import vn.edu.iuh.fit.backend.converters.EmployeeStatusConverter;
+import vn.edu.iuh.fit.backend.enums.EmployeeStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name="employee")
-@NamedQueries(
+@Table(name = "employee")
+@NamedQueries({
         @NamedQuery(name = "Employee.findAll", query = "SELECT e from Employee e where e.status=1")
-)
+})
+@XmlRootElement
 public class Employee {
     @Id
+    @Column(name = "emp_id", columnDefinition = "BIGINT(20)")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "emp_id")
     private long id;
-    @Column(name = "full_name", length = 150, nullable = false)
-    private String fullName;
-    @Column(name = "dob", nullable = false)
-    private LocalDateTime dob;
-    @Column(name = "email", unique = true, length = 150)
-    private String email;
-    @Column(name = "phone", length = 15, nullable = false)
-    private String phone;
-    @Column(name = "address", length = 250, nullable = false)
+    @Column(columnDefinition = "VARCHAR(250)", nullable = false)
     private String address;
-    @Column(name = "status", nullable = false)
+    @Column(columnDefinition = "DATETIME(6)", nullable = false)
+    @JsonbDateFormat(value = "yyyy-MM-dd")
+    private LocalDateTime dob;
+    @Column(columnDefinition = "VARCHAR(150)")
+    private String email;
+    @Column(name = "full_name", columnDefinition = "VARCHAR(150)", nullable = false)
+    private String fullname;
+    @Column(columnDefinition = "VARCHAR(15)", nullable = false)
+    private String phone;
+    @Column(columnDefinition = "INT(11)", nullable = false)
+    @Convert(converter = EmployeeStatusConverter.class)
     private EmployeeStatus status;
 
-    @OneToMany
-//    @JoinColumn
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
     private List<Order> listOrder;
 
     public Employee() {
     }
 
-    public Employee(long id, String fullName, LocalDateTime dob, String email, String phone, String address, EmployeeStatus status, List<Order> listOrder) {
-        this.id = id;
-        this.fullName = fullName;
+    public Employee(String address, LocalDateTime dob, String email, String fullname, String phone, EmployeeStatus status, List<Order> listOrder) {
+        this.address = address;
         this.dob = dob;
         this.email = email;
+        this.fullname = fullname;
         this.phone = phone;
-        this.address = address;
         this.status = status;
         this.listOrder = listOrder;
     }
@@ -55,12 +60,12 @@ public class Employee {
         this.id = id;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getAddress() {
+        return address;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public LocalDateTime getDob() {
@@ -79,20 +84,20 @@ public class Employee {
         this.email = email;
     }
 
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
     public String getPhone() {
         return phone;
     }
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public EmployeeStatus getStatus() {
@@ -115,11 +120,11 @@ public class Employee {
     public String toString() {
         return "Employee{" +
                 "id=" + id +
-                ", fullName='" + fullName + '\'' +
+                ", address='" + address + '\'' +
                 ", dob=" + dob +
                 ", email='" + email + '\'' +
+                ", fullname='" + fullname + '\'' +
                 ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
                 ", status=" + status +
                 ", listOrder=" + listOrder +
                 '}';
