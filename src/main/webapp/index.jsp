@@ -4,6 +4,10 @@
 <%@ page import="vn.edu.iuh.fit.backend.models.ProductImage" %>
 <%@ page import="java.util.Optional" %>
 <%@ page import="java.text.DecimalFormat" %>
+<%@ page import="vn.edu.iuh.fit.backend.models.CartDetail" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.text.DecimalFormatSymbols" %>
+<%@ page import="java.util.Locale" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
   Object object = session.getAttribute("productList");
@@ -12,6 +16,15 @@
     return;
   }
   List<Product> productList = (List<Product>) object;
+
+  List<CartDetail> cartDetailList;
+  Object objCartDetailList = session.getAttribute("cartDetailList");
+  if(objCartDetailList==null) {
+    cartDetailList = new ArrayList<>();
+  }else{
+    cartDetailList = (List<CartDetail>) objCartDetailList;
+  }
+  session.setAttribute("cartDetailList", cartDetailList);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -102,15 +115,21 @@
 </head>
 
 <body>
-<nav>
+<nav style="padding-top: 10px; height:75px">
   <div class="container">
     <ul>
-      <li><a href="./html/index.html"><img src="./img/THAD Mobile-logo.png" alt=""
-                                            style="width: 200px;height: 40"></a>
+      <li><a href="index.jsp"><img src="./img/THAD Mobile-logo.png" alt="" style="width: 200px;height: 40px;"></a>
       </li>
       <li id="adress-form"><a href="#">Đà Nẵng <i class="fa fa-caret-down" aria-hidden="true"></i></a> </li>
       <li><input type="text" placeholder="Bạn tìm gì...."><i class="fa fa-search" aria-hidden="true"></i></li>
-      <li><a href="GioHang.html"><button><i class="fa fa-shopping-cart"></i>Giỏ hàng</button> </a> </li>
+      <li>
+        <a href="cart.jsp">
+          <button style="position: relative; display: inline-block; padding-left:10px; padding-right: 38px;">
+            Giỏ hàng <i class="fa fa-shopping-cart"></i> &nbsp;
+            <span class="badge badge-danger" style="font-size: 15px; position: absolute; top: -8px;"><%= cartDetailList.size()%></span>
+          </button>
+        </a>
+      </li>
       <li><a href="">Lịch sử <br> đơn hàng</a></li>
       <li><a href=""> <span class="btn-content"><span class="btn-top"></span></span>Mua thẻ nạp ngay</a></li>
       <li><a href="">14h Công nghệ</a></li>
@@ -118,8 +137,8 @@
 
       <div class="adress-form">
         <div class="adress-form-content">
-          <h2 class="font-weight-bold">Chọn địa chỉ nhận hàng <span id="adress-close">X Đóng</span></h2>
-          <form action="" style="font-size: 14px;">
+          <h2>Chọn địa chỉ nhận hàng <span id="adress-close">X Đóng</span></h2>
+          <form action="">
             <p>Chọn đầy đủ địa chỉ nhận hàng để biết chính xác thời gian giao</p>
             <select name="">
               <option value="#">-- Chọn địa điểm</option>
@@ -161,9 +180,9 @@
   <div class="container">
     <div class="menu-bar-container">
       <ul>
-        <li><a href="index.html">Trang chủ</a></li>
-        <li><a href="sanpham.html"><i class="fa fa-mobile" aria-hidden="true"></i> Điện thoại </a></li>
-        <li><a href="phukien.html"><i class="fa fa-headphones" aria-hidden="true"></i> Phụ kiện <i
+        <li><a href="index.jsp" style="padding-left: 20px; padding-right: 20px;">Trang chủ</a></li>
+        <li><a href="index.jsp" style="padding-left: 20px; padding-right: 20px;"><i class="fa fa-mobile" aria-hidden="true"></i> Điện thoại </a></li>
+        <li><a href="phukien.html" style="padding-left: 20px; padding-right: 20px;"><i class="fa fa-headphones" aria-hidden="true"></i> Phụ kiện <i
                 class="fa fa-caret-down" aria-hidden="true"></i></a>
           <div class="submenu">
             <ul>
@@ -176,8 +195,8 @@
             </ul>
           </div>
         </li>
-        <li><a href="DiaChi.html"> Địa Chỉ</a></li>
-        <li><a href="#"> Giới thiệu</a>
+        <li><a href="DiaChi.html" style="padding-left: 20px; padding-right: 20px;"> Địa Chỉ</a></li>
+        <li><a href="#" style="padding-left: 20px; padding-right: 20px;"> Giới thiệu</a>
           <div class="submenu">
             <ul>
               <li><a href="GioiThieuWeb.html">Giới thiệu trang web</a></li>
@@ -185,7 +204,7 @@
             </ul>
           </div>
         </li>
-        <li><a href="dangnhap.html"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Đăng nhập</a>
+        <li><a href="dangnhap.html" style="padding-left: 20px; padding-right: 20px;"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Đăng nhập</a>
         </li>
 
 

@@ -1,4 +1,7 @@
-<%--
+<%@ page import="java.util.List" %>
+<%@ page import="vn.edu.iuh.fit.backend.models.CartDetail" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="static java.awt.SystemColor.window" %><%--
   Created by IntelliJ IDEA.
   User: ASUS-VIVOBOOK
   Date: 10/6/2023
@@ -8,6 +11,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     long productid = Long.parseLong(request.getParameter("id"));
+    List<CartDetail> cartDetailList;
+    Object objCartDetailList = session.getAttribute("cartDetailList");
+    if(objCartDetailList==null) {
+        cartDetailList = new ArrayList<>();
+    }else{
+        cartDetailList = (List<CartDetail>) objCartDetailList;
+    }
+    session.setAttribute("cartDetailList", cartDetailList);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,7 +46,7 @@
                     document.getElementById("productManufacturer").textContent = product.manufacturer;
                     document.getElementById("productDescription").textContent = product.description;
                     var productPrice = product.productPriceList[0].price;
-                    var formattedPrice = productPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    var formattedPrice = productPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     document.getElementById("productPrice").textContent = formattedPrice+"₫";
                     document.getElementById("productImage").src = product.productImageList[0].path;
                     // document.getElementById("productStatus").textContent = product.status;
@@ -399,15 +410,21 @@
 </head>
 
 <body>
-<nav>
+<nav style="padding-top: 10px; height:75px">
     <div class="container">
         <ul>
-            <li><a href="../html/index.html"><img src="../img/THAD Mobile-logo.png" alt=""
-                                                  style="width: 200px;height: 40 px;"></a>
+            <li><a href="index.jsp"><img src="./img/THAD Mobile-logo.png" alt="" style="width: 200px;height: 40px;"></a>
             </li>
             <li id="adress-form"><a href="#">Đà Nẵng <i class="fa fa-caret-down" aria-hidden="true"></i></a> </li>
             <li><input type="text" placeholder="Bạn tìm gì...."><i class="fa fa-search" aria-hidden="true"></i></li>
-            <li><a href="GioHang.html"><button><i class="fa fa-shopping-cart"></i>Giỏ hàng</button> </a> </li>
+            <li>
+                <a href="cart.jsp">
+                    <button style="position: relative; display: inline-block; padding-left:10px; padding-right: 38px;">
+                        Giỏ hàng <i class="fa fa-shopping-cart"></i> &nbsp;
+                        <span class="badge badge-danger" style="font-size: 15px; position: absolute; top: -8px;"><%= cartDetailList.size()%></span>
+                    </button>
+                </a>
+            </li>
             <li><a href="">Lịch sử <br> đơn hàng</a></li>
             <li><a href=""> <span class="btn-content"><span class="btn-top"></span></span>Mua thẻ nạp ngay</a></li>
             <li><a href="">14h Công nghệ</a></li>
@@ -458,9 +475,9 @@
     <div class="container">
         <div class="menu-bar-container">
             <ul>
-                <li><a href="index.html">Trang chủ</a></li>
-                <li><a href="sanpham.html"><i class="fa fa-mobile" aria-hidden="true"></i> Điện thoại </a></li>
-                <li><a href="phukien.html"><i class="fa fa-headphones" aria-hidden="true"></i> Phụ kiện <i
+                <li><a href="index.jsp" style="padding-left: 20px; padding-right: 20px;">Trang chủ</a></li>
+                <li><a href="index.jsp" style="padding-left: 20px; padding-right: 20px;"><i class="fa fa-mobile" aria-hidden="true"></i> Điện thoại </a></li>
+                <li><a href="phukien.html" style="padding-left: 20px; padding-right: 20px;"><i class="fa fa-headphones" aria-hidden="true"></i> Phụ kiện <i
                         class="fa fa-caret-down" aria-hidden="true"></i></a>
                     <div class="submenu">
                         <ul>
@@ -473,8 +490,8 @@
                         </ul>
                     </div>
                 </li>
-                <li><a href="DiaChi.html"> Địa Chỉ</a></li>
-                <li><a href="#"> Giới thiệu</a>
+                <li><a href="DiaChi.html" style="padding-left: 20px; padding-right: 20px;"> Địa Chỉ</a></li>
+                <li><a href="#" style="padding-left: 20px; padding-right: 20px;"> Giới thiệu</a>
                     <div class="submenu">
                         <ul>
                             <li><a href="GioiThieuWeb.html">Giới thiệu trang web</a></li>
@@ -482,7 +499,7 @@
                         </ul>
                     </div>
                 </li>
-                <li><a href="dangnhap.html"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Đăng nhập</a>
+                <li><a href="dangnhap.html" style="padding-left: 20px; padding-right: 20px;"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Đăng nhập</a>
                 </li>
 
 
@@ -528,9 +545,12 @@
                         <span>Bảo hành chính hãng 12 tháng.</span> <br>
                         <span> 1 đổi 1 trong 1 tháng nếu lỗi, đổi sản phẩm tại nhà trong 1 ngày.</span>
                     </div>
+                    <script>
+
+                    </script>
                     <div class="baner-one-product-text3">
-                        <a href="../html/GioHang.html"><button class="btn"><i class="fa fa-cart-plus"
-                                                                              aria-hidden="true"></i> Đi tới giỏ hàng</button>
+                        <a href="control-servlet?action=addToCart&id=<%= productid%>"><button class="btn"><i class="fa fa-cart-plus"
+                                                                              aria-hidden="true"></i>Thêm vào giỏ hàng</button>
                         </a>
                     </div>
 

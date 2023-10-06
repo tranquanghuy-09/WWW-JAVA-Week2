@@ -7,13 +7,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import vn.edu.iuh.fit.backend.models.Product;
-import vn.edu.iuh.fit.backend.models.ProductImage;
-import vn.edu.iuh.fit.backend.models.ProductPrice;
+import vn.edu.iuh.fit.backend.models.*;
+import vn.edu.iuh.fit.backend.services.ProductService;
 import vn.edu.iuh.fit.frontend.models.ProductModel;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Flow;
 
 @WebServlet(urlPatterns = {"/control-servlet"})
@@ -26,10 +27,29 @@ public class ControlServlet extends HttpServlet {
             case "getListProduct":
                 handleGetListProduct(req, resp);
                 break;
-            case "getListProduct2":
-
+            case "addToCart":
+                handleAddToCart(req, resp);
                 break;
         }
+    }
+
+    private void handleAddToCart(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        long idProduct = Integer.parseInt(req.getParameter("id"));
+        HttpSession session = req.getSession();
+        List<CartDetail> cartDetailList = (List<CartDetail>) session.getAttribute("cartDetailList");
+        if (cartDetailList==null){
+            cartDetailList = new ArrayList<>();
+        }
+
+        Optional<Product> optionalProduct = productModel.findById(idProduct);
+        if (optionalProduct.isPresent()){
+            Product product = optionalProduct.get();
+            CartDetail cartDetail = new CartDetail(product, 1);
+            cartDetailList.add(cartDetail);
+
+        }
+        session.setAttribute("cartDetailList", cartDetailList);
+        resp.sendRedirect("index.jsp");
     }
 
     private void handleGetListProduct(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
