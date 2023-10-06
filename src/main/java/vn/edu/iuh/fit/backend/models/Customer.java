@@ -1,6 +1,7 @@
 package vn.edu.iuh.fit.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.enterprise.inject.Default;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -23,6 +24,8 @@ public class Customer {
     private String name;
     @Column(columnDefinition = "VARCHAR(15)", nullable = false)
     private String phone;
+    @OneToOne(mappedBy = "customer")
+    private Account account;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<Order> orderList;

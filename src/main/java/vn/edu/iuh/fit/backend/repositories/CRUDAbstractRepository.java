@@ -14,7 +14,7 @@ public abstract class CRUDAbstractRepository<T> {
         em = DBConnection.getInstance().getEntityManager();
         trans = em.getTransaction();
     }
-    public boolean insertEmp(T t) {
+    public boolean insert(T t) {
         try {
             trans.begin();
             em.persist(t);

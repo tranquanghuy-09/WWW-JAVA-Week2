@@ -51,6 +51,25 @@ public class Employee {
         this.listOrder = listOrder;
     }
 
+    public Employee(long id, String address, LocalDateTime dob, String email, String fullname, String phone, EmployeeStatus status) {
+        this.id = id;
+        this.address = address;
+        this.dob = dob;
+        this.email = email;
+        this.fullname = fullname;
+        this.phone = phone;
+        this.status = status;
+    }
+
+    public Employee(String address, LocalDateTime dob, String email, String fullname, String phone, EmployeeStatus status) {
+        this.address = address;
+        this.dob = dob;
+        this.email = email;
+        this.fullname = fullname;
+        this.phone = phone;
+        this.status = status;
+    }
+
     public long getId() {
         return id;
     }

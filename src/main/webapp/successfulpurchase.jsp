@@ -1,10 +1,10 @@
-<%@ page import="vn.edu.iuh.fit.backend.models.CartDetail" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
-<%@ page import="vn.edu.iuh.fit.backend.models.Product" %>
-<%@ page import="vn.edu.iuh.fit.backend.models.ProductPrice" %>
 <%@ page import="vn.edu.iuh.fit.frontend.models.ProductPriceModel" %>
-<%@ page import="java.text.DecimalFormat" %><%--
+<%@ page import="java.text.DecimalFormat" %>
+<%@ page import="vn.edu.iuh.fit.backend.enums.EmployeeStatus" %>
+<%@ page import="java.time.LocalDateTime" %>
+<%@ page import="vn.edu.iuh.fit.backend.models.*" %><%--
   Created by IntelliJ IDEA.
   User: ASUS-VIVOBOOK
   Date: 10/6/2023
@@ -24,10 +24,14 @@
     ProductPriceModel productPriceModel = new ProductPriceModel();
     DecimalFormat decimalFormat = new DecimalFormat("#,##0");
 
+//    String address, LocalDateTime dob, String email, String fullname, String phone, EmployeeStatus
+//    status
+    Employee employee = new Employee(1,"Quy Nhơn", LocalDateTime.of(2002,7,26,0,0,0), "tranquanghuyit09@gmail.com", "Trần Quang Huy", "0338116008", EmployeeStatus.WORKING);
+    session.setAttribute("employee", employee);
+
+    Customer customer = (Customer) session.getAttribute("customer");
 
 %>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -98,7 +102,7 @@
                             <option value="#">Hà Nội</option>
                         </select>
                         <select name="" class="mt-1">
-                            <option value="#">-- Chọn Quận\Huyện</option>
+                            <option value="#" disabled>-- Chọn Quận\Huyện</option>
                             <option value="#">Quận 1</option>
                             <option value="#">TP. Thủ Đức</option>
                             <option value="#">Quận 3</option>
@@ -113,7 +117,7 @@
                             <option value="#">Quận Gò Vấp</option>
                         </select>
                         <select name="" class="mt-1">
-                            <option value="#">-- Chọn Phường\Xã</option>
+                            <option value="#" disabled>-- Chọn Phường\Xã</option>
                             <option value="#">Phường 1</option>
                             <option value="#">Phường 2</option>
                             <option value="#">Phường 3</option>
@@ -164,88 +168,18 @@
     </div>
 </section>
 
-<div class="container my-3" style="height: 900px;">
-    <div class="d-flex py-3"><h3 id="total"></h3> <a class="mx-3 btn btn-primary" href="order.jsp">Đặt hàng</a></div>
-    <table class="table table-light">
-        <thead>
-        <tr>
-            <th scope="col">Tên</th>
-            <th scope="col">Hãng sản xuất</th>
-            <th scope="col">Giá</th>
-            <th scope="col">Số lượng</th>
-            <th scope="col">Xóa</th>
-        </tr>
-        </thead>
-        <tbody>
-        <%
-            if (cartDetailList != null) {
-                for (CartDetail cartDetail : cartDetailList) {
-                    Product product = cartDetail.getProduct();
-        %>
-        <tr>
-            <td><%= product.getName()%></td>
-            <td><%= product.getManufacturer()%></td>
-            <td><%= decimalFormat.format(productPriceModel.getProductByIdWithNewPrice(product.getProduct_id()).getPrice())%></td>
-            <td>
-                <form action="order-now" method="post" class="form-inline">
-                    <input type="hidden" name="id" value="<%= product.getProduct_id()%>" class="form-input">
-                    <div class="form-group d-flex justify-content-between">
-                        <a class="btn bnt-sm btn-incre" href="javascript:void(0);" onclick="increaseValue(<%= product.getProduct_id()%>)"><i class="fas fa-plus-square"></i></a>
-                        <input id="quantityInput<%= product.getProduct_id()%>" type="text" name="quantity" class="form-control"  value="<%= cartDetail.getQuantity()%>" readonly>
-                        <a class="btn btn-sm btn-decre" href="javascript:void(0);" onclick="decreaseValue(<%= product.getProduct_id()%>)"><i class="fas fa-minus-square"></i></a>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-sm">Buy</button>
-                </form>
-            </td>
-            <td><a href="remove-from-cart?id=<%=product.getProduct_id() %>" class="btn btn-sm btn-danger">Remove</a></td>
-        </tr>
-
-        <%
-                }}%>
-        </tbody>
-    </table>
+<div class="container mt-3" style="height: 750px;">
+    <section class="container order" >
+        <h2 class="text-success">Mua hàng thành công</h2>
+        <h3 class="text-secondary">Cảm ơn anh/chị <%= customer.getName()%> đã mua hàng!</h3>
+        <div class="my-5">
+            <a href="control-servlet?action=successfulPurchase">
+                <button class="btn btn-primary" style="font-size: 20px;">Quay vể trang chủ</button>
+            </a>
+        </div>
+    </section>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', calculateTotal);
-    function increaseValue(productId) {
-        var quantityInput = document.getElementById('quantityInput' + productId);
-        var currentValue = parseInt(quantityInput.value);
 
-        // Tăng giá trị lên 2 và gán lại vào trường input
-        quantityInput.value = currentValue + 1;
-
-        // Gọi hàm tính tổng tiền sau khi thay đổi giá trị
-        calculateTotal();
-    }
-
-    function decreaseValue(productId) {
-        var quantityInput = document.getElementById('quantityInput' + productId);
-        var currentValue = parseInt(quantityInput.value);
-
-        // Giảm giá trị đi 1 nếu nó lớn hơn 0 và gán lại vào trường input
-        if (currentValue > 0) {
-            quantityInput.value = currentValue - 1;
-        }
-
-        // Gọi hàm tính tổng tiền sau khi thay đổi giá trị
-        calculateTotal();
-    }
-
-    function calculateTotal() {
-        var priceElements = document.querySelectorAll('tbody td:nth-child(3)');
-        var quantityElements = document.querySelectorAll('tbody input[name="quantity"]');
-
-        var total = 0;
-
-        for (var i = 0; i < priceElements.length; i++) {
-            var price = parseFloat(priceElements[i].innerText.replace(/,/g, ''));
-            var quantity = parseFloat(quantityElements[i].value);
-            total += price * quantity;
-        }
-
-        document.getElementById('total').innerText = 'Tổng tiền: ' + total.toLocaleString('en-US');
-    }
-</script>
 
 <!-- ---------------------footer thông tin ------------------------------- -->
 <footer class="footer">

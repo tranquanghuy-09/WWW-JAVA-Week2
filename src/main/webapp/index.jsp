@@ -182,7 +182,7 @@
       <ul>
         <li><a href="index.jsp" style="padding-left: 20px; padding-right: 20px;">Trang chủ</a></li>
         <li><a href="index.jsp" style="padding-left: 20px; padding-right: 20px;"><i class="fa fa-mobile" aria-hidden="true"></i> Điện thoại </a></li>
-        <li><a href="phukien.html" style="padding-left: 20px; padding-right: 20px;"><i class="fa fa-headphones" aria-hidden="true"></i> Phụ kiện <i
+        <li><a href="./html/phukien.html" style="padding-left: 20px; padding-right: 20px;"><i class="fa fa-headphones" aria-hidden="true"></i> Phụ kiện <i
                 class="fa fa-caret-down" aria-hidden="true"></i></a>
           <div class="submenu">
             <ul>
@@ -195,16 +195,16 @@
             </ul>
           </div>
         </li>
-        <li><a href="DiaChi.html" style="padding-left: 20px; padding-right: 20px;"> Địa Chỉ</a></li>
+        <li><a href="./html/DiaChi.html" style="padding-left: 20px; padding-right: 20px;"> Địa Chỉ</a></li>
         <li><a href="#" style="padding-left: 20px; padding-right: 20px;"> Giới thiệu</a>
           <div class="submenu">
             <ul>
-              <li><a href="GioiThieuWeb.html">Giới thiệu trang web</a></li>
-              <li><a href="GioiThieuThanhVien.html">Giới thiệu thành viên</a></li>
+              <li><a href="./html/GioiThieuWeb.html">Giới thiệu trang web</a></li>
+              <li><a href="./html/GioiThieuThanhVien.html">Giới thiệu thành viên</a></li>
             </ul>
           </div>
         </li>
-        <li><a href="dangnhap.html" style="padding-left: 20px; padding-right: 20px;"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Đăng nhập</a>
+        <li><a href="login.jsp" style="padding-left: 20px; padding-right: 20px;"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Đăng nhập</a>
         </li>
 
 

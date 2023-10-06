@@ -46,7 +46,7 @@
                     document.getElementById("productManufacturer").textContent = product.manufacturer;
                     document.getElementById("productDescription").textContent = product.description;
                     var productPrice = product.productPriceList[0].price;
-                    var formattedPrice = productPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    var formattedPrice = productPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     document.getElementById("productPrice").textContent = formattedPrice+"₫";
                     document.getElementById("productImage").src = product.productImageList[0].path;
                     // document.getElementById("productStatus").textContent = product.status;

@@ -11,7 +11,7 @@ public class ProductService {
     ProductRepository productRepository = new ProductRepository();
 
     public boolean insertEmp(Product product) {
-        return productRepository.insertEmp(product);
+        return productRepository.insert(product);
     }
     public boolean update(Product product) {
         return productRepository.update(product);
