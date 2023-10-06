@@ -1,17 +1,18 @@
 package vn.edu.iuh.fit.backend.enums;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum EmployeeStatus {
-    ACTIVE(1),
-    IN_ACTIVE(0),
-    TERMINATED(-1);
+    WORKING(1), UN_WORKING(0), QUITTED(-1);
 
-    private int value;
+    private final int status;
 
-    EmployeeStatus(int value){
-        this.value = value;
+    private EmployeeStatus(int status) {
+        this.status = status;
     }
 
-    public int getValue() {
-        return value;
+    @JsonValue
+    public int getStatus() {
+        return status;
     }
 }

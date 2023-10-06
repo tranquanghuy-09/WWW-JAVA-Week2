@@ -1,5 +1,6 @@
 package vn.edu.iuh.fit.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.json.bind.annotation.JsonbDateFormat;
 import jakarta.persistence.*;
 
@@ -24,8 +25,9 @@ public class ProductPrice {
     @Column(columnDefinition = "DOUBLE", nullable = false)
     private double price;
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Product product;
 
     public ProductPrice() {

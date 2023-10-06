@@ -7,9 +7,9 @@ import vn.edu.iuh.fit.backend.db.DBConnection;
 import vn.edu.iuh.fit.backend.models.Employee;
 
 public abstract class CRUDAbstractRepository<T> {
-    private EntityManager em;
-    private EntityTransaction trans;
-    private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+    protected EntityManager em;
+    protected EntityTransaction trans;
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
     public CRUDAbstractRepository() {
         em = DBConnection.getInstance().getEntityManager();
         trans = em.getTransaction();

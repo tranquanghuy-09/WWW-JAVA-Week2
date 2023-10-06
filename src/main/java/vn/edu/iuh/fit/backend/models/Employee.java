@@ -1,6 +1,5 @@
 package vn.edu.iuh.fit.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.json.bind.annotation.JsonbDateFormat;
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.XmlRootElement;

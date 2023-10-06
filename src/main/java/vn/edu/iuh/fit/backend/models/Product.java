@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import vn.edu.iuh.fit.backend.converters.ProductStatusConverter;
-import vn.edu.iuh.fit.backend.enums.ProductStatus;
+import vn.edu.iuh.fit.backend.converters2.ProductStatusConverter;
+import vn.edu.iuh.fit.backend.enums2.ProductStatus;
 
 import java.util.List;
 
@@ -33,7 +33,8 @@ public class Product {
     private ProductStatus status;
     @Column(columnDefinition = "VARCHAR(25)", nullable = false)
     private String unit;
-
+    @OneToMany(mappedBy = "product")
+    private List<ProductPrice> productPriceList;
     @OneToMany(mappedBy = "product")
     private List<ProductImage> productImageList;
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
@@ -52,6 +53,14 @@ public class Product {
         this.name = name;
         this.status = status;
         this.unit = unit;
+    }
+
+    public List<ProductPrice> getProductPriceList() {
+        return productPriceList;
+    }
+
+    public void setProductPriceList(List<ProductPrice> productPriceList) {
+        this.productPriceList = productPriceList;
     }
 
     public long getProduct_id() {
