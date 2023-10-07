@@ -197,7 +197,7 @@
             </tbody>
         </table>
         <div class="price-total mt-3">
-            <p>Tổng tiền:<span id="total"></span></p>
+            <p>Tổng tiền:&nbsp;<span id="total"></span></p>
         </div>
     </form>
     <script>
@@ -210,13 +210,13 @@
             var total = 0;
 
             for (var i = 0; i < priceElements.length; i++) {
-                var price = parseFloat(priceElements[i].innerText.replace(/,/g, ''));
+                var price = parseFloat(priceElements[i].innerText.replace(/\./g, ''));
                 var quantity = parseFloat(quantityElements[i].innerText);
                 total += price * quantity;
                 console.log(total);
             }
             console.log(total);
-            document.getElementById('total').innerText = total.toLocaleString('en-US');
+            document.getElementById('total').innerText = total.toLocaleString();
         }
     </script>
 </section>

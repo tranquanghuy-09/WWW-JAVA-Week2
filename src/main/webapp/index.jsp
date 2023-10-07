@@ -455,7 +455,7 @@
         <li><a href="">Địa chỉ: Nguyễn Văn Bảo, phường 4, Quận Gò Vấp, thành phố Hồ Chí Minh</a></li>
         <li><a href="">Tư vấn mua hàng: 0368636452</a></li>
         <li><a href="">Tư vấn kĩ thuật: 0327003644</a></li>
-        <li><a href="">Email: 20024591.iuh@gmail.com</a></li>
+        <li><a href="">Email: tranquanghuyit09@gmail.com</a></li>
         <li><a href="./html/sitemap.html"> Site Map</a></li>
       </ul>
     </div>

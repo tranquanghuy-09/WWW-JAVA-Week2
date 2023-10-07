@@ -211,10 +211,8 @@
         var quantityInput = document.getElementById('quantityInput' + productId);
         var currentValue = parseInt(quantityInput.value);
 
-        // Tăng giá trị lên 2 và gán lại vào trường input
         quantityInput.value = currentValue + 1;
 
-        // Gọi hàm tính tổng tiền sau khi thay đổi giá trị
         calculateTotal();
     }
 
@@ -238,12 +236,12 @@
         var total = 0;
 
         for (var i = 0; i < priceElements.length; i++) {
-            var price = parseFloat(priceElements[i].innerText.replace(/,/g, ''));
+            var price = parseFloat(priceElements[i].innerText.replace(/\./g, ''));
             var quantity = parseFloat(quantityElements[i].value);
             total += price * quantity;
         }
 
-        document.getElementById('total').innerText = 'Tổng tiền: ' + total.toLocaleString('en-US');
+        document.getElementById('total').innerText = 'Tổng tiền: ' + total.toLocaleString();
     }
 </script>
 
