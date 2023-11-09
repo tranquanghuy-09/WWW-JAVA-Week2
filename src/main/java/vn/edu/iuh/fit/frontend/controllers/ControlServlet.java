@@ -70,10 +70,10 @@ public class ControlServlet extends HttpServlet {
         List<Product> productList = productModel.getAll();
         for (Product p : productList) {
             System.out.println(p);
-            ProductImage productImage = p.getProductImageList().get(0);
-            System.out.println(productImage);
-            ProductPrice productPrice = p.getProductPriceList().get(0);
-            System.out.println(productPrice);
+//            ProductImage productImage = p.getProductImageList().get(0);
+//            System.out.println(productImage);
+//            ProductPrice productPrice = p.getProductPriceList().get(0);
+//            System.out.println(productPrice);
         }
         HttpSession session = req.getSession();
         session.setAttribute("productList", productList);
